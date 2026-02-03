@@ -16,13 +16,24 @@ export const metadata = {
   description: "Shopping List App",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        {/* Background image */}
+        <div
+          className="min-h-screen bg-cover bg-center"
+          style={{ backgroundImage: "url('/istanbul.png')" }}
+        >
+          {/* Dark overlay for readability */}
+          <div className="min-h-screen bg-black/70">{children}</div>
+        </div>
       </body>
     </html>
   );
