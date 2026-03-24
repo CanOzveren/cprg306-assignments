@@ -26,24 +26,19 @@ async function fetchMealIdeas(ingredient: string): Promise<Meal[]> {
 export default function MealIdeas({ ingredient }: { ingredient: string }) {
   const [meals, setMeals] = useState<Meal[]>([]);
 
+  async function loadMealIdeas() {
+    const result = await fetchMealIdeas(ingredient);
+    setMeals(result);
+  }
+
   useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      const result = await fetchMealIdeas(ingredient);
-      if (!cancelled) setMeals(result);
-    }
-
-    load();
-
-    return () => {
-      cancelled = true;
-    };
+    loadMealIdeas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ingredient]);
 
   return (
     <section className="w-full">
-      <h2 className="mb-6 text-2xl font-bold text-white">
+      <h2 className="mb-4 text-2xl font-bold text-white">
         Meal Ideas {ingredient ? `for “${ingredient}”` : ""}
       </h2>
 
@@ -56,19 +51,13 @@ export default function MealIdeas({ ingredient }: { ingredient: string }) {
       )}
 
       {meals.length > 0 && (
-        <ul className="grid gap-4 sm:grid-cols-2">
-          {meals.map((meal) => (
+        <ul className="space-y-3">
+          {meals.map((m) => (
             <li
-              key={meal.idMeal}
-              className="overflow-hidden rounded-lg bg-slate-800 shadow hover:bg-slate-700 transition"
+              key={m.idMeal}
+              className="rounded border border-zinc-700 bg-zinc-950 p-4 text-white"
             >
-              <img
-                src={meal.strMealThumb}
-                alt={meal.strMeal}
-                className="h-40 w-full object-cover"
-              />
-
-              <div className="p-3 text-white font-medium">{meal.strMeal}</div>
+              {m.strMeal}
             </li>
           ))}
         </ul>
